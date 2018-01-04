@@ -8,15 +8,14 @@ import sys
 import time
 import csv
 
-
+# convert datetime string to epoch seconds
 toEpoch = lambda str: int(time.mktime(time.strptime(str, '%Y-%m-%dT%H:%M:%S%z')))
+# util function to unescape special characters
+# used during debuging so strings can fit to one line
 unescape = lambda str: (codecs.getdecoder("unicode_escape")(str))[0]
 
 if __name__ == "__main__":
-    notExists = "https://issues.apache.org/jira/browse/CAMEL-999999999999"
-
     issueUrl = "https://issues.apache.org/jira/browse/CAMEL-10597"
-    #issueUrl = notExists
 
     try:
         with urlopen(issueUrl) as f:
@@ -29,6 +28,9 @@ if __name__ == "__main__":
             if soup.find('div', 'aui-page-header-main').h1.text == "Issue does not exist":
                 sys.stderr.write("Issue does not exist")
 
+
+
+            # summary
             summary = soup.find(id='summary-val').get_text()
 
 
@@ -78,6 +80,9 @@ if __name__ == "__main__":
             # print(resolved)
             # print(toEpoch(created))
 
+            
+            
+            # description
             description = soup.find(id='description-val')
             description = html2text(str(description))
             # description = unescape(description)
